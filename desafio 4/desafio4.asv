@@ -1,0 +1,60 @@
+% desafio 4, escenografia => el arte de ocultar informacion
+% guardar una marca de propiedad en los datos.
+% ex: marcas de agua, imagen retratada
+
+% este desafio hay que extraer una marca invisible sobre la transformada de
+% fourier en una imagen.
+% hay que recuperar, lo mas parecido a la marca ?¿ 
+
+% descargar el fichero desafio4
+piedrasMarcadas = imread("piedrasMarcadas.png");
+imshow(piedrasMarcadas);
+
+
+% load forest
+% ensi lo que tenmos q hacer es eliminar el error
+lena_gray = imread("lena_gray.jpg");
+figure; imshow(lena_gray);
+load clown
+x=ind2gray(X,map);
+figure; imshow(x); % sigue siendo el payaso
+imarcada=marcar(lena_gray, x,128,64,0.01);
+% figure; imshow(imarcada);
+figure; imshow(imarcada,gray);
+imarcada=marcar(lena_gray, x,128,64,0.001);
+figure; imshow(imarcada,gray);
+imarcada=marcar(lena_gray, x,256,64,0.01);
+figure; imshow(imarcada,gray);
+marca=extraemarca2(imarcada, 64,0.01);
+figure; imshow(marca,gray);
+figure; imshow(marca);
+figure; imshow(marca/max(marca(:)));
+
+
+
+clear all
+load("imarcada.mat")
+piedrasMarcadas = imread("piedrasMarcadas.png");
+imshow(piedrasMarcadas);
+piedras_gris = rgb2gray(piedrasMarcadas);
+
+
+imshow(y);
+
+[f,c]=size(piedras_gris);
+i=1
+figure
+ln2 = [128.4 128.5 128.6 128.7 128.8 128.9 129]     % ir modificando la lista de pixeles hasta encontrar el óptimo
+leps = [7 8 9 10 11 12]   % ir modificando la lista de posibles eps hasta encontrar el óptimo
+for n2 = ln2
+  for eps = leps
+      y2 = dct2(piedras_gris)
+      y2 = y2(f-n2+1:f,c-n2+1:c)/eps
+      y2 = idct2(y2)
+      subplot(size(ln2,2),size(leps,2),i), imshow(y2), title(['n2: ',num2str(n2),', eps: ',num2str(eps)])
+      i=i+1
+  end
+end
+
+
+
